@@ -1,0 +1,82 @@
+Author: Zhenduo Wang
+
+Logistic Regression Model trained
+
+Mean Accuracy:  0.579025862542
+Scores:
+	  PRE = 0.5617647058823529
+	  REC = 0.5162162162162162
+	  F-MEASURE = 0.5380281690140843
+
+Confusion Matrix: [[248 149]
+[179 191]]
+
+Feature weights:
+	-0.0490	named entity   
+	-0.0454	similarity     
+	0.0396	punctuation    
+	0.4162	subjectivity   
+	0.7254	adjective/adverb
+	0.7785	polarity       
+	1.9526	discourse marker
+
+#############################################################################################
+
+Support Vector Machine Model trained
+
+Mean Accuracy:  0.588420241249
+Scores:
+	  PRE = 0.5620052770448549
+	  REC = 0.5756756756756757
+	  F-MEASURE = 0.5687583444592792
+
+Confusion Matrix: [[231 166]
+[157 213]]
+
+#############################################################################################
+
+Random Forest Model trained
+
+Mean Accuracy:  0.547475012106
+Scores:
+	  PRE = 0.5032258064516129
+	  REC = 0.42162162162162165
+	  F-MEASURE = 0.45882352941176474
+
+Confusion Matrix: [[243 154]
+[214 156]]
+
+#############################################################################################
+#############################################################################################
+
+
+#############################################################################################
+Analysis					
+#############################################################################################
+
+We made a feature-classifier based tweet many detection prototype for the first stage. 
+In the feature selection part. We have 4 features now (sentiment polarity, subjectivity, 
+semantic similarity and discourse marker indicator). These features are measured separately 
+and concatenated as one vector to be the input of classifiers. The classifiers takes the 
+feature vector as input and output a binary categorical label for each tweet. Now the irony 
+detector has 3 embedded classifiers (Logistic regression, Support vector machine and Random 
+forest). The accuracies of the classifiers are 0.579, 0.588, 0.547, respectively. We also get 
+the precision, recall and F-measure using the official evaluation function. The performances 
+of SVM model are generally the best. See the output of our code.
+
+In order to have a taste of the reasons behind the different performance of the classifiers. 
+We make confusion matrices for all the classifiers and  do a weight analysis for logistic 
+regression model because logistic regression has a linear kernel.  From the confusion matrix, 
+random forest and logistic regression classifiers tend to overlook more irony tweets rather 
+than marking tweets as irony. But the SVM classifier does not have any tendency according to 
+the confusion matrix. Then, we try to understand the importance of the features by the magnitude 
+of their weights in logistic regression. They are 0.78, 0.45, -0.03 and 1.92, respectively. This 
+means of the 4 features we have now, the semantic similarity is a relative weak feature.
+
+We will use the best one of the classifiers for each step but will still keep evaluating all of 
+them with the above methods until the feature measurements are finally developed. Then, we will do 
+a final comparison and choose the best one of out of three.
+
+
+#############################################################################################
+#############################################################################################

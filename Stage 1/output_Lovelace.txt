@@ -1,0 +1,36 @@
+Logistic Regression Classifier:
+Mean Accuracy:
+0.586596307777
+p=:0.5497630331753555
+r=:0.6270270270270271
+f=:0.5858585858585857
+Confusion Matrix:
+[207, 190]
+[138, 232]
+Feature weights:
+	-0.1665	word count     
+	-0.1076	similarity     
+	-0.0174	named entity   
+	0.3025	punctuation    
+	0.3896	subjectivity   
+	0.5068	adjective/adverb
+	0.7564	polarity       
+	1.6789	discourse marker
+Support Vector Machine Classifier:
+Mean Accuracy:
+0.611885937888
+p=:0.5727923627684964
+r=:0.6486486486486487
+f=:0.6083650190114068
+Confusion Matrix:
+[218, 179]
+[130, 240]
+Random Forest Classifier:
+Mean Accuracy:
+0.584245410881
+p=:0.5906432748538012
+r=:0.5459459459459459
+f=:0.5674157303370786
+Confusion Matrix:
+[257, 140]
+[168, 202]

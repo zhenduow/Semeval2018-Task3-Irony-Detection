@@ -1,0 +1,39 @@
+Author: Madiha Mirza
+
+This file describes the 3rd party code, tools, and modules used in the project.
+
+1) File: evaluate.py
+   This is the official evaluation script for SemEval-2018 Task 3: Irony detection in English tweets. The script takes as input a submission dir containing the system output and calculates accuracy, precision, recall and F1-score.
+
+2) A detailed description of Python modules and their dependencies used in the project is mentioned below:
+
+ * NLTK(Natural Language Toolkit) is a platform for building Python programs to work with human language data. It provides easy-to-use interfaces to over 50 corpora and lexical resources such as WordNet, along with a suite of text processing libraries for classification, tokenization, stemming, tagging, parsing, and semantic reasoning (Reference: http://www.nltk.org/).
+   **In our project, we used NLTK for:
+      word_tokenize: A tokenizer that divides a given string into sub strings.
+      pos_tag: NLTK's built-in POS tagger. It uses the Penn Treebank tagset by default. 
+
+ * Scikit-Learn is a Python Machine Learning tool which works for all the Supervised and Unsupervised machine learning techniques (Reference: http://scikit-learn.org/).  
+   **In our project, Scikit-Learn is used for Classification as our approach is based on Supervised learning.
+   ** We train a logistic regression classifier, a random forest classifier, and a support vector machine (SVM).
+  
+ * NumPy is the Base N-dimensional array package (Reference: http://www.numpy.org/).
+
+ * SciPy library depends on NumPy, which provides convenient and fast N-dimensional array manipulation (Reference: https://www.scipy.org/).  
+   **In our project, Numpy and Scipy are used for computing N-dimensional array objects.
+  
+ * TextBlob is a Python library for processing textual data. It provides a simple API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, classification, translation, and more (Reference: https://textblob.readthedocs.io/en/dev/).  
+   **affectiveFeatures.py makes use of TextBlob for measuring sentiment polarity and subjectivity features.
+
+ * Openpyxl is a Python library for reading and writing Excel 2010 xlsx/xlsm/xltx/xltm files (Reference: https://openpyxl.readthedocs.io/en/default/).  
+  **In our project, Openpyxl is used for reading EmoSenticNet, a lexical resource that assigns six WordNet Affect emotion labels to SenticNet concepts.
+
+3)  EmoSenticNet is a lexical resource that assigns six WordNet Affect emotion labels to SenticNet concepts (Reference: https://www.gelbukh.com/emosenticnet/). 
+    We use EmoSenticNet to measure affective score of the emoticons and other emotional words.
+
+4) WordNet is a lexical database for the English language. It groups English words into sets of synonyms called synsets (Reference: http://wordnetweb.princeton.edu/perl/webwn).
+   We used WordNet synsets to evaluate sentence similarity between two sentences. The similarity of the sentences is computed based on the similarity of the pairs of words. 
+
+5) File: sentencesimilarity.py includes an adaptation of code from http://nlpforhackers.io/wordnet-sentence-similarity/. 
+   The code uses WordNet synsets for measuring sentence semantic similarity.
+
+
