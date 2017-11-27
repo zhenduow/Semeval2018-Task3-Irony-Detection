@@ -67,6 +67,10 @@ print("Computing political")
 # Collect the political scores of all the cleaned tweet data
 pol_list = political_scorer(cleanedtweets)
 
+print("Computing celebrity")
+# Collect the celebrity mention scores of all the cleaned tweet data
+celeb_list = celebrity_scorer(cleanedtweets)
+
 print("Computing adjectives and adverbs...")
 # Collect the adjective and adverb scores of all the cleaned tweet data
 adj_adv_list = adj_adv_counter(cleanedtweets)
@@ -80,7 +84,7 @@ wc_list = word_counter(cleanedtweets)
 print("Concatenating features...")
 # Concatenate all the features together
 feature_table = numpy.column_stack(
-    [polarity_and_subjectivity, sent_sim_list, pol_list, disc_list, ne_list, inten_list, adj_adv_list, punc_list, wc_list])
+    [polarity_and_subjectivity, sent_sim_list, pol_list, disc_list, celeb_list, ne_list, inten_list, adj_adv_list, punc_list, wc_list])
 
 # Using classifiers and generate output
 print("Training Classifiers...")
