@@ -10,13 +10,13 @@ import numpy
 
 from affectiveFeatures import *
 from classifiers import *
-from ij_score import interjection_score
 from posfunctions import *
 from preProcessing import *
 from political import political_scorer
 from sentencesimilarity import *
 from structuralfeatures import *
 from intensifiers import intensi_scorer
+from celeb import *
 
 # ----------MAIN RUN FUNCTION--------#
 
@@ -55,19 +55,15 @@ print("Computing discourse markers...")
 # Collect the discourse marker scores of all the cleaned tweet data
 disc_list = discourse_scorer(cleanedtweets)
 
-print("Computing named entity count...")
-# Collect the named entity scores of all the cleaned tweet data
-ne_list = named_entity_count(cleanedtweets)
-
-print("Computing intensifiers")
+print("Computing intensifiers...")
 # Collect the intensifier scores of all the cleaned tweet data
 inten_list = intensi_scorer(cleanedtweets)
 
-print("Computing political")
+print("Computing political...")
 # Collect the political scores of all the cleaned tweet data
 pol_list = political_scorer(cleanedtweets)
 
-print("Computing celebrity")
+print("Computing celebrity...")
 # Collect the celebrity mention scores of all the cleaned tweet data
 celeb_list = celebrity_scorer(cleanedtweets)
 
@@ -75,16 +71,29 @@ print("Computing adjectives and adverbs...")
 # Collect the adjective and adverb scores of all the cleaned tweet data
 adj_adv_list = adj_adv_counter(cleanedtweets)
 
+print("Computing Prepositions...")
+prep_list = prep_scorer(cleanedtweets)
+
 print("Computing punctuation markers...")
 # Collect the punctuation marker scores of all the cleaned tweet data
 punc_list = punc_count(tweet_list)
 
 wc_list = word_counter(cleanedtweets)
 
+print("Computing laughter counts...")
+laugh_list = laughter_scorer(tweet_list)
+
+print("Computing named entity count...")
+# Collect the named entity scores of all the cleaned tweet data
+ne_list = named_entity_count(tweet_list)
+
+print("Computing stopwords...")
+stopword_list = stopwords_score(cleanedtweets)
+
 print("Concatenating features...")
 # Concatenate all the features together
 feature_table = numpy.column_stack(
-    [polarity_and_subjectivity, sent_sim_list, pol_list, disc_list, celeb_list, ne_list, inten_list, adj_adv_list, punc_list, wc_list])
+    [polarity_and_subjectivity, sent_sim_list, pol_list, disc_list, celeb_list, ne_list, inten_list, adj_adv_list, punc_list, wc_list, laugh_list, prep_list, stopword_list])
 
 # Using classifiers and generate output
 print("Training Classifiers...")

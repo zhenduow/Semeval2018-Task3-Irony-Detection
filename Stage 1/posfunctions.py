@@ -142,4 +142,32 @@ def adj_adv_counter(tweets): #By Kevin Swanberg
 	#return the list of the adjective and adverb counts for every tweet
 	return adj_adv_list
 
+def prep_scorer(tweets):
+	prep_list = []
+	# Iterate through tweets
+	for tweet in tweets:
 
+		# Zero all counters and tag a tokenized version of each tweet
+		tagged = pos_tag(word_tokenize(tweet))
+		word_count = 0
+		prep_count = 0
+		prep_score = 0
+
+		# Iterate through each tagged word
+		for tag in tagged:
+
+			# If the word is tagged as an adjective, add one to the count of adjectives
+			if (tag[1] == 'IN'):
+				prep_count += 1
+
+			# keep track of word count
+			word_count += 1
+
+		# Divide adjective and adverb counts by total word count to normalize for tweet length
+		prep_score = prep_count / word_count
+
+		# Output a list of the adjective and adverb scores for each tweet
+		prep_list.append(prep_score)
+
+	# return the list of the adjective and adverb counts for every tweet
+	return prep_list

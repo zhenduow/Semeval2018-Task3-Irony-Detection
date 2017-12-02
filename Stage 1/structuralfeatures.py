@@ -47,6 +47,26 @@ def discourse_scorer(tweets): #By Kevin Swanberg
 
 	return disc_score_list
 
+def laughter_scorer(tweets):
+	laugh_score_list = []
+	for tweet in tweets:
+		tweet = tweet.split()
+		count = 0
+		laugh_count = 0
+		for word in tweet:
+			if word in ("lol", "rofl", "haha", "ha", "hah", "lmfao", "lmao", "lmaoo", "lmfaoo", "hahaha"):
+				laugh_count += 1
+			else:
+				laugh_count = laugh_count
+			count+=1
+
+		if laugh_count == 0:
+			laugh_score = 0
+		else:
+			laugh_score = (laugh_count / count)
+		laugh_score_list.append(laugh_score)
+	return laugh_score_list
+
 #--------PUNCTUATION COUNTER------# By Kevin Swanberg
 #This function counts punctuation deemed significant by researchers on automatic irony detection. These
 #punctuation types are said to occur in tweets containing irony typically. First, the function counts each punctuation
@@ -69,6 +89,8 @@ def punc_count(tweets): #By Kevin Swanberg
 		exclamation_count = 0
 		question_count = 0
 		colon_count = 0
+		quote_count = 0
+		apostrophe_count = 0
 
 		#Check for each important piece of punctuation
 		hash_count = tweet.count('#')
@@ -77,9 +99,11 @@ def punc_count(tweets): #By Kevin Swanberg
 		exclamation_count = tweet.count('!')
 		question_count = tweet.count('?')
 		colon_count = tweet.count(':')
+		quote_count = tweet.count('"')
+		apostrophe_count = tweet.count("'")
 
 		#Make a list of the count of each piece of punctuation and append this to the count of punctuation in all tweets
-		feature_list = [hash_count, ellipsis1_count, ellipsis2_count, exclamation_count, question_count, colon_count]
+		feature_list = [hash_count, ellipsis1_count, ellipsis2_count, exclamation_count, question_count, colon_count, quote_count, apostrophe_count]
 		punc_count_list.append(feature_list)
 
 	#return a list containing the individual punctuation counts for every tweet
@@ -107,3 +131,28 @@ def word_counter(tweets): #By Kevin Swanberg
 
 	#return the list of word counts
 	return word_count_list
+
+def stopwords_score(tweets):
+
+	#Open the pre-made list of discourse markers
+	with open('stopwords.txt', 'r') as file:
+		stopwords = file.read()
+		stopwords = stopwords.split('\n')
+
+	stop_list = []
+	for tweet in tweets:
+		tweet = tweet.split()
+		wc = 0
+		stopcount = 0
+		for word in tweet:
+
+			if word in stopwords:
+
+				stopcount +=1
+			wc+=1
+
+		stopscore = stopcount/wc
+
+		stop_list.append(stopscore)
+
+	return stop_list

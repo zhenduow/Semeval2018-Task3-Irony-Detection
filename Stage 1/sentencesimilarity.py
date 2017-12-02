@@ -107,17 +107,26 @@ def sentence_similarity(sentence1, sentence2): #This code adapted by Kevin Swanb
 #Main Sentence Similarity Function By Kevin Swanberg
 def simrun(tweets):
 	sent_sim_list = []
-
 	#iterate through each tweet
 	for tweet in tweets:
 		sentences = (nltk.sent_tokenize(tweet)) #Split into sentences
 
-		#Sentence similarity can only be calculated if there are two sentences in a tweet. If there are two sentences,
+		#Sentence similarity can only be calculated if there are two or more sentences in a tweet. If there are more two sentences,
 		#Calculated sentence similarity. If not, return a sentence similarity score of 1
-		if len(sentences) > 1 and len(sentences[1]) > 3:
-			focus_sentence = sentences[0]
-			sentence = sentences[1]
-			sent_sim_list.append(sentence_similarity(focus_sentence, sentence))
+		if len(sentences) > 1:
+			i = 0
+			while i < (len(sentences) - 1):
+				sent_sims = []
+				j = i+1
+				while j < len(sentences):
+					focus_sentence = sentences[i]
+					sentence = sentences[j]
+					sent_sims.append(sentence_similarity(focus_sentence, sentence))
+					j+=1
+				i+=1
+			sent_sim_list.append(max(sent_sims))
+
+
 		else:
 			sent_sim_list.append(1)
 

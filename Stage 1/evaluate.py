@@ -73,7 +73,13 @@ def show_most_informative_features(clf, n, output):
 	                 "named entity",
 	                 "adjective/adverb",
 	                 "punctuation",
-	                 "word count"
+	                 "word count",
+	                 "celebrity",
+	                 "political",
+	                 "laughter",
+	                 "preposition",
+	                 "intensifiers",
+	                 "stopwords"
 	                 ]
 	coefs_with_fns = sorted(zip(clf.coef_[0], feature_names))
 	top = zip(coefs_with_fns[:n], coefs_with_fns[:-(n + 1):-1])
