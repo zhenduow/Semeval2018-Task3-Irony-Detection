@@ -2,7 +2,8 @@
 
 #-------------STRUCTURAL FEATURES---------#
 #AUTHOR: Kevin Swanberg
-#This file contains simple structural feature measures including discourse markers, punctuation, and word count
+#This file contains simple structural feature measures including discourse markers, laughter, swear words, stopwords, punctuation,
+#word count, and URLs
 
 #Import in main run file as from structuralfeatures import Structuralfeatures
 
@@ -212,10 +213,11 @@ def word_counter(tweets): #By Kevin Swanberg
 	return word_count_list
 
 #---URL COUNTER----#
-#This function idnetifies if a tweet has a URL. This was designed based on the work found in "Detecting Sarcasm in
+# This function identifies if a tweet has a URL. This was designed based on the work found in "Detecting Sarcasm in
 # Multimodal Social Platforms" (DOI 10.1145/2964284.2964321) - They found that ironic tweets often contain images
-#and often the irony depends on the image. However, our data does not immediately give us images. We did see when
-#assessing the data though that any time there was an image, it was included in the link using a URL, and a majority
+# and often the interpretation of the irony depends on the image. For example, a photo of a warm, sunny beach with 
+# the caption "Terrible weather we're having." However, our data does not immediately give us images. We did see when 
+# assessing the data though that any time there was an image, it was included in the link using a URL, and a majority
 # of the URLs in the data were images, so the simplest way to identify this was to just check if a tweet had a URL
 
 def url_count(tweets): #By Kevin Swanberg
