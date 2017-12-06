@@ -3,7 +3,9 @@
 #This feature was again motivated by a hunch - irony is a complex linguistic feature and thus likely often employs
 #complex linguistic features to convey it, such as metaphors. #This metaphor identifier is not perfect, it focuses only
 #on Noun to Noun metaphors using a Stanford Parser for POS tagging and checks them against Wordnet Synsets. However, this
-#code takes over two hours to run on the training data, so it is just not feasible to use for this project.
+#code takes over two hours to run on the training data, so it is just not feasible to use for this project. This code
+#requires the Stanford Parser be saved in the SAME folder in order to run. I did not include it since we will not be
+#using this module
 
 from nltk.corpus import wordnet as wn
 import nltk
