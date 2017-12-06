@@ -111,22 +111,29 @@ def simrun(tweets):
 	for tweet in tweets:
 		sentences = (nltk.sent_tokenize(tweet)) #Split into sentences
 
-		#Sentence similarity can only be calculated if there are two or more sentences in a tweet. If there are more two sentences,
+		#Sentence similarity can only be calculated if there are two or more sentences in a tweet. If there are more tahn two sentences,
 		#Calculated sentence similarity. If not, return a sentence similarity score of 1
 		if len(sentences) > 1:
+			#initialize an iterator
 			i = 0
+			#move the iterator through the list of sentences
 			while i < (len(sentences) - 1):
 				sent_sims = []
+				#initialize a second iterator, one greater than the first
 				j = i+1
+				#move this second iterator through the sentences
 				while j < len(sentences):
+					#pass each combination of two sentences to the synset function
 					focus_sentence = sentences[i]
 					sentence = sentences[j]
 					sent_sims.append(sentence_similarity(focus_sentence, sentence))
 					j+=1
 				i+=1
+			#Take the max similarity between sentences and return this value. Intuitively, I would have expected we would
+			#want the lowest similarity for this measure. However, I found we received a *slightly* (.05 percent) higher
+			#accuracy with the max. I also tried taking the average of the sentence similarity values, but that was even
+			#worse, so, we take the max.
 			sent_sim_list.append(max(sent_sims))
-
-
 		else:
 			sent_sim_list.append(1)
 

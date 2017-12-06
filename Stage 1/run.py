@@ -17,6 +17,7 @@ from sentencesimilarity import *
 from structuralfeatures import *
 from intensifiers import intensi_scorer
 from celeb import *
+from metaphors import *
 
 # ----------MAIN RUN FUNCTION--------#
 
@@ -78,7 +79,9 @@ print("Computing punctuation markers...")
 # Collect the punctuation marker scores of all the cleaned tweet data
 punc_list = punc_count(tweet_list)
 
-wc_list = word_counter(cleanedtweets)
+print("Computing word count...")
+#Collect the word count of all tweet data
+wc_list = word_counter(tweet_list)
 
 print("Computing laughter counts...")
 laugh_list = laughter_scorer(tweet_list)
@@ -90,10 +93,16 @@ ne_list = named_entity_count(tweet_list)
 print("Computing stopwords...")
 stopword_list = stopwords_score(cleanedtweets)
 
+print("Computing swearwords...")
+swear_list = swear_scorer(cleanedtweets)
+
+print("Computing URLs...")
+url_list = url_count(tweet_list)
+
 print("Concatenating features...")
 # Concatenate all the features together
 feature_table = numpy.column_stack(
-    [polarity_and_subjectivity, sent_sim_list, pol_list, disc_list, celeb_list, ne_list, inten_list, adj_adv_list, punc_list, wc_list, laugh_list, prep_list, stopword_list])
+    [polarity_and_subjectivity, sent_sim_list, pol_list, disc_list, celeb_list, ne_list, inten_list, adj_adv_list, punc_list, wc_list, laugh_list, prep_list, stopword_list, swear_list, url_list])
 
 # Using classifiers and generate output
 print("Training Classifiers...")
@@ -106,5 +115,7 @@ output = open("output_Lovelace.txt", 'w')
 LogisticRegressionClf(X, y, output)
 SVMClf(X, y, output)
 RandomForestClf(X, y, output)
+
+
 
 output.close()

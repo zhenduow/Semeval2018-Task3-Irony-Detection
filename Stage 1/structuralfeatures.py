@@ -10,10 +10,15 @@
 #This set of functions counts the total number of 'Discourse Markers' in each tweet and normalizes this by the word count
 #of each tweet. Discourse markers are claimed to appear more often in tweets containing irony and sarcasm. This module works
 #by checking each word in a tweet against a manually created list of known discourse markers. These were found by comparing
-#lists of discourse markers online and selecting the most common ones. Currently there are only 33 discourse markers but
-#more will be added for the stage 2 submission.
+#lists of discourse markers online and selecting the most common ones. There are 53 discourse markers in the list -
+#extended from the Stage 1 submission
+
+#In addition to Discourse markers, we also check for "Laughter" markers, Swear Words, and Stopwords - while not technically discourse
+#Markers, these are similar in their use and in their identification, so they are included in this section.
 
 #Call in main run function as Structuralfeatures.discourse_scorer(tweets)
+
+import re
 
 def discourse_scorer(tweets): #By Kevin Swanberg
 
@@ -47,25 +52,97 @@ def discourse_scorer(tweets): #By Kevin Swanberg
 
 	return disc_score_list
 
-def laughter_scorer(tweets):
+def laughter_scorer(tweets): #By Kevin Swanberg
+	#Similar to the discourse markers, this was a feature implemented without any academic research behind it, but the
+	#theory was that these would be prevalanet in ironic tweets, just like discourse markers. Since they were not
+	#*technically* laughter markers are not discourse markers. The function works by checking if "laughter" markers are
+	#contained in each tweet, adds one for every time one of these occurs, then normalizes these occurances for the length
+	#of the tweet using the word count
+	#initialize the list
 	laugh_score_list = []
+	#iterate through each tweet
 	for tweet in tweets:
+		#split tweet into words
 		tweet = tweet.split()
+		#initialize word count and laugh count
 		count = 0
 		laugh_count = 0
+		#iterate through words
 		for word in tweet:
+			#check for laughter markers, add one each time one occurs
 			if word in ("lol", "rofl", "haha", "ha", "hah", "lmfao", "lmao", "lmaoo", "lmfaoo", "hahaha"):
 				laugh_count += 1
-			else:
-				laugh_count = laugh_count
 			count+=1
-
-		if laugh_count == 0:
-			laugh_score = 0
-		else:
-			laugh_score = (laugh_count / count)
+		#normalize for length of tweet
+		laugh_score = (laugh_count / count)
+		#append the tweet's score to the overall list and return the list
 		laugh_score_list.append(laugh_score)
 	return laugh_score_list
+
+def swear_scorer(tweets): #By Kevin Swanberg
+	#Again, there is no academic basis behind this feature, but since ironic tweets are typically emotional in nature
+	#it was hypothesized that ironic tweets might include these "emotional words."The function works by checking if swear
+	#words are contained in each tweet, adds one for every time one of these occurs, then normalizes these occurances for
+	#the length of the tweet using the word count
+
+	#Open the pre-made list of swear words
+	with open('swear_list.txt', 'r') as file:
+		swearwords = file.read()
+		swearwords = swearwords.split('\n')
+	#initalize the list
+	swear_list = []
+	#iterate through each tweet
+	for tweet in tweets:
+		#split tweet into words
+		tweet = tweet.split()
+		#initialize word count and swear count
+		wc = 0
+		swearcount = 0
+		#iterate through each word
+		for word in tweet:
+			#if the word is a swear word, add one to the swear count
+			if word in swearwords:
+				swearcount +=1
+			wc+=1
+		#normalize for length of tweet and add score to the swear list
+		swearscore = swearcount/wc
+
+		swear_list.append(swearscore)
+
+	return swear_list
+
+def stopwords_score(tweets): #By Kevin Swanberg
+
+	#Stopwords are words that search engines and NLP programs often ignore because they do not contain significant information
+	#often. However, they are very common in conversational English, which is a common feature of irony and so we thought
+	#this may be a significant feature - it did offer some improvement for our system
+
+
+	#Open the pre-made list of stopwords markers
+	with open('stopwords.txt', 'r') as file:
+		stopwords = file.read()
+		stopwords = stopwords.split('\n')
+	#initialize list
+	stop_list = []
+	#iterate through tweets
+	for tweet in tweets:
+		#split tweet into words
+		tweet = tweet.split()
+		#initilaize counters
+		wc = 0
+		stopcount = 0
+		#iterate through words
+		for word in tweet:
+			#if the word is a stopword, add to the stopword count, add to wordcount
+			if word in stopwords:
+				stopcount +=1
+			wc+=1
+		#normalize for length of tweet
+		stopscore = stopcount/wc
+		#append to list
+		stop_list.append(stopscore)
+	#return the list
+	return stop_list
 
 #--------PUNCTUATION COUNTER------# By Kevin Swanberg
 #This function counts punctuation deemed significant by researchers on automatic irony detection. These
@@ -112,7 +189,9 @@ def punc_count(tweets): #By Kevin Swanberg
 #-------WORD COUNTER-------# By Kevin Swanberg
 #It was claimed by researchers that word count was a significant indicator of tweets containing irony, with irony being associated
 #with tweets with lower word counts. The function simply splits a tweet into a list of words, then takes the length of this
-#list as the word count, and returns a list of these word counts
+#list as the word count, and returns a list of these word counts. For stage 2, we tried counting the word count of each
+#individual sentence within each tweet, but this actually reduced our accuracy, so we kept this simple by just taking the
+#word count of each tweet.
 
 #Call in main run function as Structuralfeatures.word_counter(tweets)
 
@@ -132,27 +211,21 @@ def word_counter(tweets): #By Kevin Swanberg
 	#return the list of word counts
 	return word_count_list
 
-def stopwords_score(tweets):
+#---URL COUNTER----#
+#This function idnetifies if a tweet has a URL. This was designed based on the work found in "Detecting Sarcasm in
+# Multimodal Social Platforms" (DOI 10.1145/2964284.2964321) - They found that ironic tweets often contain images
+#and often the irony depends on the image. However, our data does not immediately give us images. We did see when
+#assessing the data though that any time there was an image, it was included in the link using a URL, and a majority
+# of the URLs in the data were images, so the simplest way to identify this was to just check if a tweet had a URL
 
-	#Open the pre-made list of discourse markers
-	with open('stopwords.txt', 'r') as file:
-		stopwords = file.read()
-		stopwords = stopwords.split('\n')
-
-	stop_list = []
+def url_count(tweets): #By Kevin Swanberg
+	#initialize the list
+	url_list = []
+	#iterate through tweets
 	for tweet in tweets:
-		tweet = tweet.split()
-		wc = 0
-		stopcount = 0
-		for word in tweet:
-
-			if word in stopwords:
-
-				stopcount +=1
-			wc+=1
-
-		stopscore = stopcount/wc
-
-		stop_list.append(stopscore)
-
-	return stop_list
+		#regex for URLs
+		if (re.search("(?P<url>https?://[^\s]+)", tweet)) is not None:
+			url_list.append(1)
+		else:
+			url_list.append(0)
+	return url_list

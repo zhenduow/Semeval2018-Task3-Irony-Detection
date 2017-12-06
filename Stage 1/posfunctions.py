@@ -19,6 +19,14 @@ from nltk import word_tokenize, pos_tag
 #as a POS, so it is very simple to simply search for the NE POS tag. Named entities were found to be more common in ironic
 #tweets by researchers, motivating the use of this feature.
 
+#For Stage 2, I actually extended the Named Entity function to identify specific types of Named Entities (Places,
+#Geopolitical Entities, Organizations, People, Events, or Times) and quantify these individually. However, this
+#specificity actually decreased our system's accuracy, so I replaced this with the original Named Entity feature from
+#Stage 1. I was motivated to make this change initially because one specific type of irony we were expected to identify
+#was situational irony. Linguistically it seemed to make sense that situational irony would require a description of a
+#situation - so that would be a place, a time, or an event, so I thought distinguishing these individually would help us
+#detect that specifically, but this was not the case.
+
 #Call in main run function as Posfunctions.named_entity_count(sample)
 
 #This function tokenizes each tweet by separating it into sentences, then chunks sentences and creates an NLTK POS tree
@@ -55,6 +63,7 @@ def extract_entity_names(t): #By Kevin Swanberg
 #This is the main named entity count function, it iterates through a list of tweets, chunks each tweet and counts
 #the named entities in each tweet. It then divides the number of named entities by the total word count for the tweet
 #in order to normalize the number for the tweet's size.
+
 def named_entity_count(sample): #By Kevin Swanberg
 
 	#Make a list of the number of named entities in each tweet
@@ -142,7 +151,14 @@ def adj_adv_counter(tweets): #By Kevin Swanberg
 	#return the list of the adjective and adverb counts for every tweet
 	return adj_adv_list
 
-def prep_scorer(tweets):
+#------PREPOSITION SCORER------# By Kevin Swanberg
+#The inclusion of this feature was motivated by subtask 2, which asked us to identify specific types of irony, and, as
+#mentioned previously, one of these types of irony was situational irony, which again, as mentioned previously, requires
+#a situation be described. I believed that this would often necessitate the use of prepositions - for example "I was AT
+#the store" or "I was ON the bus" etc. This feature has seemed to help our accuracy.
+
+def prep_scorer(tweets): #By Kevin Swanberg
+
 	prep_list = []
 	# Iterate through tweets
 	for tweet in tweets:
