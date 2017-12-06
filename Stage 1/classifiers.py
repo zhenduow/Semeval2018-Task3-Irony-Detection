@@ -167,3 +167,38 @@ def NBClf(X, y, output):
 	for item in confusion_matrix(y[train_size:],clf.predict(X[train_size:])).tolist():
 		output.write("%s\n" % item)
 	print_cm(confusion_matrix(y[train_size:],clf.predict(X[train_size:])),labels=['non-ironic','ironic'])
+
+
+def VotedClf(X,y,output):
+	sample_size = len(X)
+	train_size = int(0.8 * sample_size)
+	feature_num = len(X[0])
+	folds = 5
+	clf1 = SVC()
+	clf2 = LogisticRegression()
+	clf3 = RandomForestClassifier()
+	vclf = VotingClassifier(estimators=[('lr', clf1), ('rf', clf2), ('gnb', clf3)], voting='hard')
+	vclf.fit(X, y)
+	# Cross validation accuracy
+	scores = cross_val_score(vclf, X, y, cv=folds)
+	# Call the evaluation function
+	vclf.fit(X[:train_size], y[:train_size])
+	p, r, f = precision_recall_fscore(y[train_size:], vclf.predict(X[train_size:]), beta=1, labels=[0, 1], pos_label=1)
+	output.write("Voted Classifier:\n")
+	output.write('Mean Accuracy:\n')
+	output.write(str(numpy.mean(scores)))
+	output.write("\np=:")
+	output.write(str(p))
+	output.write("\nr=:")
+	output.write(str(r))
+	output.write("\nf=:")
+	output.write(str(f))
+	output.write("\nConfusion Matrix:\n")
+	for item in confusion_matrix(y[train_size:], vclf.predict(X[train_size:])).tolist():
+		output.write("%s\n" % item)
+
+
+def bowpca(X):
+	pca = PCA(n_components=30)
+	pca.fit(X)
+	return X
