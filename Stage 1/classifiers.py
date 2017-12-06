@@ -5,17 +5,14 @@
 # All of them takes the feature matrix and produce the prediction label
 # We keep tracking of these classifiers with different features in order to get the best results.
 
+
 import numpy
-from sklearn import *
-from sklearn.linear_model import LogisticRegression  
-from sklearn.svm import SVC
-from textblob import TextBlob
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import cross_val_score
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.model_selection import cross_val_score
-from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+from sklearn.decomposition import PCA
 from evaluate import *
 
 '''
