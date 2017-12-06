@@ -115,7 +115,7 @@ output = open("output_Lovelace.txt", 'w')
 LogisticRegressionClf(X, y, output)
 SVMClf(X, y, output)
 RandomForestClf(X, y, output)
-
+VotedClf(X,y,output)
 
 
 output.close()
